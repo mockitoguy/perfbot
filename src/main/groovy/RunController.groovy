@@ -22,9 +22,8 @@ class RunController {
     def proc = new ProcessBuilder(run.cmd)
         .directory(run.dir)
         .redirectErrorStream(true)
-        .redirectOutput(buildLog)
-    def result = proc
-        .start().waitFor()
+
+    def result = proc.start().waitFor()
     if (result != 0) {
       throw new RuntimeException("Build failure. Build log ($buildLog.absolutePath):\n" + buildLog.text)
     }

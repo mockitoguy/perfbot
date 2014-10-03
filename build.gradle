@@ -6,6 +6,8 @@ repositories {
   mavenCentral()
 }
 
+sourceCompatibility = '1.6'
+
 def ykJars = ['lib/yjp.jar', 'lib/yjp-controller-api-redist.jar']
 def ykHome = file("/Applications/YourKit_Java_Profiler_2014_build_14104.app")
 def apiJars = files(ykJars.collect { "$ykHome/" + it })
