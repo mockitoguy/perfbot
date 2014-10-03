@@ -19,6 +19,7 @@ dependencies {
 }
 
 run {
+  dependsOn check
   mainClassName = "PerformanceTester"
   args file("bot-results.txt"), "/Users/sfaber/linkedin/network", "ligradle", ":clean", ":history:history-war:build"
 }

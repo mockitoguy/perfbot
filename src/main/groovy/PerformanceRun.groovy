@@ -14,11 +14,12 @@ class PerformanceRun {
     this.resultsFile = new File(filePath).absoluteFile
     this.resultsFile.parentFile.mkdirs()
     assert this.resultsFile.isFile() || this.resultsFile.createNewFile()
-    println "Results will be stored in " + filePath
+    println "Results will be stored in " + this.resultsFile.absolutePath
 
     String dirPath = args[1]
     this.dir = new File(dirPath).absoluteFile
     assert this.dir.isDirectory() : "Incorrect working directory: $dirPath"
+    println "Working dir: " + this.dir.absolutePath
 
     cmd = args[2..-1]
     assert cmd.size() > 0 : "Command not supplied"
@@ -33,7 +34,7 @@ class PerformanceRun {
     snapshots[builds] = size
   }
 
-  static int mega(long bytes) {
+  static String mega(long bytes) {
     def mega = bytes / (1024 * 1024)
     String.format("%.0fM", (float) mega)
   }
