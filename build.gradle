@@ -1,0 +1,27 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+repositories {
+  mavenCentral()
+}
+
+def ykJars = ['lib/yjp.jar', 'lib/yjp-controller-api-redist.jar']
+def ykHome = file("/Applications/YourKit_Java_Profiler_2014_build_14104.app")
+def apiJars = files(ykJars.collect { "$ykHome/" + it })
+assert apiJars.every { it.exists() }
+
+dependencies {  
+  compile "org.codehaus.groovy:groovy-all:2.0.5"
+  compile apiJars
+
+  testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+}
+
+run {
+  mainClassName = "PerformanceTester"
+  args file("bot-results.txt"), "/Users/sfaber/linkedin/network", "ligradle", ":clean", ":history:history-war:build"
+}
+
+
+
