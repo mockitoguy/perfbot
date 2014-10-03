@@ -1,6 +1,10 @@
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 class PerformanceRunTest extends Specification {
+
+  @Rule TemporaryFolder temp = new TemporaryFolder()
 
   def "prints nicely"() {
     expect:
@@ -9,10 +13,13 @@ class PerformanceRunTest extends Specification {
   }
 
   def "parses arguments"() {
-    def r = new PerformanceRun("/Users/sfaber/tmp/foo.txt", "/Users/sfaber/linkedin/network", "ligradle", ":clean", ":history:history-war:build")
+    def results = temp.newFile("results.txt")
+    def projectDir = temp.newFolder("project")
+
+    def r = new PerformanceRun(results.toString(), projectDir.toString(), "gradle", "clean", ":someProject:build")
     expect:
-    r.cmd == ["ligradle", ":clean", ":history:history-war:build"]
-    r.resultsFile.absolutePath == "/Users/sfaber/tmp/foo.txt"
-    r.dir.absolutePath == "/Users/sfaber/linkedin/network"
+    r.cmd == ["gradle", "clean", ":someProject:build"]
+    r.resultsFile.absolutePath == results.absolutePath
+    r.dir.absolutePath == projectDir.absolutePath
   }
 }
