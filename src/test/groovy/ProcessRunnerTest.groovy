@@ -6,11 +6,11 @@ class ProcessRunnerTest extends Specification {
 
   def "invokes process"() {
     expect:
-    new ProcessRunner(new File("."), ["gradle", "-i"], true).run()
+    new ProcessRunner(new File("."), ["gradle", "-i"], true).run().totalTime.length() > 0
   }
 
   def "invokes process silently"() {
     expect:
-    new ProcessRunner(new File("."), ["gradle"], false).run()
+    new ProcessRunner(new File("."), ["gradle"], false).run().totalTime.length() > 0
   }
 }

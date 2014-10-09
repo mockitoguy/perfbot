@@ -1,0 +1,3 @@
+class ProcessResult {
+  String totalTime
+}

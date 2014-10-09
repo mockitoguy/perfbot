@@ -7,6 +7,7 @@ class PerformanceRun {
   File resultsFile
   File dir
   boolean verbose
+  List<String> buildTimes = []
 
   PerformanceRun() {
   }
@@ -55,7 +56,7 @@ class PerformanceRun {
         previous = v
       }
     }
-    "'" + cmd.join(" ") + "' -> " + history + ", avg. leak ~" + mega((long) total/(snapshots.size() - 1))
+    "'" + cmd.join(" ") + "' -> " + history + ", avg. leak ~" + mega((long) total/(snapshots.size() - 1)) + ", times: " + buildTimes
   }
 
   void storeResult() {
@@ -64,5 +65,10 @@ class PerformanceRun {
     resultsFile.parentFile.mkdirs()
     resultsFile.createNewFile()
     resultsFile.text = resultsFile.text + "\n" + result
+  }
+
+  void buildFinished(String totalTime) {
+    builds++
+    buildTimes << totalTime
   }
 }

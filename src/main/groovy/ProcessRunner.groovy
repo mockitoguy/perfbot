@@ -14,15 +14,19 @@ class ProcessRunner {
     this.verbose = verbose
   }
 
-  void run() throws IOException {
+  ProcessResult run() throws IOException {
     def buildLog = new File(workDir, "build.log")
     buildLog.createNewFile()
     def out = verbose? System.out : new PrintStream(new ByteArrayOutputStream())
     def p = new ProcessBuilder(commandLine).directory(workDir).redirectErrorStream(true).start()
+    String totalTime = ""
     def t = Thread.start{
       p.getInputStream().withReader { Reader r ->
         String line = r.readLine()
         while(line != null) {
+          if (line.startsWith("Total time: ")) {
+            totalTime = line - "Total time: "
+          }
           out.println(line)
           line = r.readLine()
         }
@@ -37,5 +41,6 @@ class ProcessRunner {
       }
       throw new RuntimeException(message)
     }
+    return new ProcessResult(totalTime: totalTime)
   }
 }

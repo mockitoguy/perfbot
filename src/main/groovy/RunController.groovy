@@ -16,8 +16,8 @@ class RunController {
 
   void runBuild() {
     println "Running build..."
-    new ProcessRunner(run.dir, run.cmd, run.verbose).run()
-    run.builds++
+    def totalTime = new ProcessRunner(run.dir, run.cmd, run.verbose).run()
+    run.buildFinished(totalTime.totalTime)
   }
 
   void snapshot() {
