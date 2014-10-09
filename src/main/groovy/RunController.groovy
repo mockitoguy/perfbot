@@ -4,7 +4,6 @@ import com.yourkit.api.MemorySnapshot
 class RunController {
 
   private final PerformanceRun run
-  Controller controller
 
   RunController(PerformanceRun run) {
     this.run = run
@@ -17,25 +16,12 @@ class RunController {
 
   void runBuild() {
     println "Running build..."
-    def buildLog = new File(run.dir, "build.log")
-    buildLog.createNewFile()
-    def proc = new ProcessBuilder(run.cmd)
-        .directory(run.dir)
-        .redirectErrorStream(true)
-
-    def result = proc.start().waitFor()
-    if (result != 0) {
-      throw new RuntimeException("Build failure. Build log ($buildLog.absolutePath):\n" + buildLog.text)
-    }
+    new ProcessRunner(run.dir, run.cmd, run.verbose).run()
     run.builds++
-
-    if (controller == null) {
-      controller = new Controller("localhost", 10001);
-    }
   }
 
   void snapshot() {
-    assert controller != null : "first run at least one build!"
+    Controller controller = new Controller("localhost", 10001);
     controller.forceGC()
     def snapshotFile = new File(controller.captureMemorySnapshot());
     println "Captured snapshot: $snapshotFile"
