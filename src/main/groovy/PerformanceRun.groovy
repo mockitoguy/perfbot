@@ -8,13 +8,19 @@ class PerformanceRun {
   File dir
   boolean verbose
   List<String> buildTimes = []
+  int warmUpRuns = 2
+  int runs = 3
 
   PerformanceRun() {
   }
 
   PerformanceRun(String[] arguments) {
-    List args = new LinkedList(asList(arguments))
+    List<String> args = new LinkedList(asList(arguments))
     this.verbose = args.remove("-v")
+
+    warmUpRuns = removeInt(args, "--warmUpRuns=", warmUpRuns)
+    runs = removeInt(args, "--runs=", runs)
+
     String filePath = args[0]
     this.resultsFile = new File(filePath).absoluteFile
     this.resultsFile.parentFile.mkdirs()
@@ -29,6 +35,16 @@ class PerformanceRun {
     cmd = args[2..-1]
     assert cmd.size() > 0 : "Command not supplied"
     println "Command: '" + cmd.join(" ") + "'"
+  }
+
+  static int removeInt(List<String> args, String argName, int defaultValue) {
+    String value = args.find { it.startsWith argName }
+    if (value) {
+      args.remove(value)
+      return (value - argName) as int
+    } else {
+      return defaultValue
+    }
   }
 
   RunController controller() {

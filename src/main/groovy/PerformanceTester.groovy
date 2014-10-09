@@ -4,12 +4,13 @@ class PerformanceTester {
     def run = new PerformanceRun(args)
     def c = run.controller()
 
-    c.runBuild()
-    c.runBuild()
+    run.warmUpRuns.times {
+      c.runBuild()
+    }
 
-    c.buildAndSnapshot()
-    c.buildAndSnapshot()
-    c.buildAndSnapshot()
+    run.runs.times {
+      c.buildAndSnapshot()
+    }
 
     run.storeResult()
   }

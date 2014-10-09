@@ -34,5 +34,18 @@ class PerformanceRunTest extends Specification {
     r.resultsFile.absolutePath == results.absolutePath
     r.dir.absolutePath == projectDir.absolutePath
     r.verbose
+    r.warmUpRuns == 3
+    r.runs == 2
+  }
+
+  def "parses no of runs"() {
+    def results = temp.newFile("results.txt")
+    def projectDir = temp.newFolder("project")
+
+    def r = new PerformanceRun(results.toString(), projectDir.toString(), "--warmUpRuns=1", "--runs=5", "gradle", "clean", ":someProject:build")
+    expect:
+    r.cmd == ["gradle", "clean", ":someProject:build"]
+    r.warmUpRuns == 1
+    r.runs == 5
   }
 }
