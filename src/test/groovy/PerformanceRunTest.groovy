@@ -21,5 +21,18 @@ class PerformanceRunTest extends Specification {
     r.cmd == ["gradle", "clean", ":someProject:build"]
     r.resultsFile.absolutePath == results.absolutePath
     r.dir.absolutePath == projectDir.absolutePath
+    !r.verbose
+  }
+
+  def "knows verbose mode"() {
+    def results = temp.newFile("results.txt")
+    def projectDir = temp.newFolder("project")
+
+    def r = new PerformanceRun(results.toString(), projectDir.toString(), "-v", "gradle", "clean", ":someProject:build")
+    expect:
+    r.cmd == ["gradle", "clean", ":someProject:build"]
+    r.resultsFile.absolutePath == results.absolutePath
+    r.dir.absolutePath == projectDir.absolutePath
+    r.verbose
   }
 }

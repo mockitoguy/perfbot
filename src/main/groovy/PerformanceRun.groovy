@@ -1,15 +1,19 @@
+import static java.util.Arrays.asList
+
 class PerformanceRun {
   int builds = 0
   Map<Integer, Long> snapshots = new LinkedHashMap()
   List<String> cmd = ["ligradle", ":clean", ":history:history-war:build"]
   File resultsFile
   File dir
+  boolean verbose
 
   PerformanceRun() {
-
   }
 
-  PerformanceRun(String[] args) {
+  PerformanceRun(String[] arguments) {
+    List args = new LinkedList(asList(arguments))
+    this.verbose = args.remove("-v")
     String filePath = args[0]
     this.resultsFile = new File(filePath).absoluteFile
     this.resultsFile.parentFile.mkdirs()
