@@ -34,8 +34,8 @@ class PerformanceRunTest extends Specification {
     r.resultsFile.absolutePath == results.absolutePath
     r.dir.absolutePath == projectDir.absolutePath
     r.verbose
-    r.warmUpRuns == 3
-    r.runs == 2
+    r.warmUpRuns == 2
+    r.runs == 3
   }
 
   def "parses no of runs"() {
